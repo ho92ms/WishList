@@ -1,0 +1,28 @@
+# --- Backend (FastAPI) ---
+fastapi
+uvicorn[standard]
+
+# --- Config / env ---
+python-dotenv
+pydantic-settings
+
+# --- DB (SQLAlchemy + SQLite) ---
+SQLAlchemy
+
+# --- External API calls ---
+requests
+
+# --- Frontend (Streamlit) ---
+streamlit
+matplotlib
+
+# --- Automation (weekly worker) ---
+schedule
+
+# --- Testing ---
+pytest
+pytest-asyncio
+httpx
+
+# --- Optional but useful ---
+pandas

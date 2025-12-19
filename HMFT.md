@@ -23,21 +23,49 @@ Vizsgáljuk az $a_{\text{én}}$ ágenshez tartozó parciális függvényt, legye
 
 **2.1. Definíció (A viselkedési egyenlet)**
 
-$$f(t) = -\tanh(t - t_0) + \frac{1}{2} \cdot \mathbb{I}_{\text{szóltam}} \cdot \left(1 - e^{-(t-t_0)^2}\right)$$
+$$f(t) = -\tanh(t - t_0) - \Theta(t - t_0) + \alpha \cdot \Theta(t - (t_0 + \varepsilon_1)) + \beta \cdot \Theta(t - (t_0 + \varepsilon_2)) $$
+$$+ \frac{1}{2} \cdot \mathbb{I}_{\text{szóltam}} $$
 
 Ahol:
 *   $\tanh$: Hiperbolikus tangens (a felelősség azonnali telítése a negatív tartományba).
 *   $\mathbb{I}_{\text{szóltam}}$: Indikátorváltozó, értéke $1$, ha az „Én szóltam” esemény bekövetkezett, egyébként $0$.
+*   $\Theta$: **Heaviside-lépcsőfüggvény**. Értéke $0$, ha az argumentum negatív, és $1$, ha pozitív. (Ez modellezi a diszkrét eseményeket, amikor a felelősség "ugrásszerűen" eltűnik).
+*   $\alpha, \beta$: A 3. fejezetben részletezett áthárítási együtthatók.
+
+---
 
 **2.2. Tétel (Aszimptotikus viselkedés)**
 A függvény határértékei a kritikus pontokban:
 
-$$\lim_{t \to t_0} f(t) = -1 \quad (-100\%)$$
+$$\lim_{t \to t_0} f(t) \approx -1 + \frac{1}{2} \cdot \mathbb{I}_{\text{szóltam}} \quad (-100\%)$$
 
+A végtelenben a rendszer beáll egy stabil, de elérhetetlen állapotba:
 $$\lim_{t \to \infty} f(t) = \sup \{ M \mid M \in \text{Morális Magaslat} \}$$
 
 *Bizonyítás:* A $\lim_{x \to \infty} \tanh(x) = 1$ tulajdonság és a l'Hôpital-szabály triviális alkalmazásával adódik.
+ *(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak $-50\%$, de a rendszer globális állapota ettől még összeomlott.)*
 
+Nézzük meg, miért jön ki a -1 és hogy mit jelent ez:
+
+### 2.2. Tétel ellenőrzése - a kikérem magamnak szingularitás:
+A képlet a $t_0$ pillanatban (közvetlenül utána, $t \to t_0^+$):
+$$f(t) = \underbrace{-\tanh(0)}_{\approx 0} - \underbrace{\Theta(0^+)}_{1} + \underbrace{\text{többi tag}}_{0} = -1$$
+
+Tehát **számításilag helyes**, a határérték tényleg -1.
+
+### 2.2.1. A "Magyar Valóság" értelmezése (Miért jó a -100%?)
+A dokumentum elején deklaráltuk a **Felelősségmegmaradás Törvényét**:
+$$\sum \text{Felelősség} = 1 \quad (+100\%)$$
+
+Ha a saját felelősség ($f(t)$) a hiba pillanatában **-1** (-100%), az a következőt jelenti az egyenlet átrendezésével:
+
+$$f_{\text{saját}} + f_{\text{többiek}} = 1$$
+$$-1 + f_{\text{többiek}} = 1$$
+$$f_{\text{többiek}} = 2 \quad (200\%)$$
+
+**Mit jelent ez magyarra fordítva?**
+Azt, hogy a hiba pillanatában az első reakció nem a semlegesség (0), hanem az **aktív támadás **:
+> *"Nem elég, hogy nem én rontottam el (-1), de most még nekem kell helyrehozni azt, amit ti duplán elcs##tetek (+2)!"*
 ---
 
 ### 3. A Felelősségváltozás Dinamikája (Deriváltak)
@@ -68,12 +96,16 @@ $$\text{div } \mathbf{F} = \nabla \cdot \mathbf{F} = 0$$
 
 *Interpretáció:* A felelősség nem keletkezik és nem szűnik meg, csak vándorol.
 
+---
+
 **4.2. Tétel (Nem konzervatív erőtér)**
 A mező rotációja nem zérus:
 
 $$\text{rot } \mathbf{F} = \nabla \times \mathbf{F} \neq \mathbf{0}$$
 
 *Következmény:* A felelősség örvényes mozgást végez az $a_{\text{én}} \to a_{\text{te}} \to a_{\text{körülmények}} \to a_{\text{én}}$ zárt görbén. A rendszerben a munkavégzés (értsd: megoldás keresése) nem útfüggetlen, hanem végtelen ciklusba torkollik.
+
+---
 
 **4.3. Differenciálegyenlet-rendszer (Mátrixos alak)**
 Legyen $\mathbf{x}(t)$ a felelősségvektor. Ekkor:
@@ -101,6 +133,8 @@ Vizsgáljuk a felelős megtalálásának számítási igényét a $M$ rendszerbe
 **6.1. Definíció (A Felelős-Keresési Probléma - FKP)**
 Adott egy $G(V, E)$ irányított gráf (úgynevezett *Szervezeti Ábra*), ahol $v \in V$ a munkavállalók, és $e(u,v) \in E$ a „tedd át másra” reláció. A feladat találni egy olyan $v_{felelös}$ csúcsot, amelyre $\text{deg}(v) = 0$ (nyelő csúcs).
 
+---
+
 **6.2. Tétel (NP-nehézség)**
 Az FKP probléma $\text{NP}$-teljes, sőt, a gyakorlatban gyakran eldönthetetlen (hasonlóan a Megállási Problémához).
 
@@ -117,6 +151,8 @@ Legyen $\Psi$ a "Megcsináltam a feladatot" állapotfüggvény. Amíg a főnök 
 
 $$|\Psi\rangle = \frac{1}{\sqrt{2}} \big( | \text{Kész} \rangle + | \text{Még hozzá se kezdtem} \rangle \big)$$
 
+---
+
 **7.2. A Heisenberg-féle Pályázati Határozatlanság**
 Jelölje $\Delta x$ a projekt megvalósulási helyét (pl. EU-s lombkorona sétány) és $\Delta p$ az eltűnt közpénz mennyiségét. Ekkor:
 
@@ -124,10 +160,12 @@ $$\Delta x \cdot \Delta p \ge \frac{\hbar}{2} \cdot \text{Korrupciós Együtthat
 
 *Interpretáció:* Minél pontosabban tudjuk, hogy *hol* épült meg valami (pl. a pusztában), annál kevésbé tudjuk megmondani, *hova* tűnt a pénz, és fordítva.
 
-
 ---
+
 **7.3. Tétel (Az Eseményhorizont)**
 A konyhában vagy a dohányzóban töltött idő ($t_{break}$) és az elvégzett munka ($W$) között fordított arányosság áll fenn, de kívülről nézve az ágens *foglaltnak* tűnik.
+
+---
 
 **7.4. Állítás (A Meetingek Termodinamikája)**
 Egy értekezlet hasznossága ($U$) exponenciálisan csökken a résztvevők számával ($N$) és az elfogyasztott pogácsa mennyiségével ($P$):
@@ -150,6 +188,8 @@ Legyen $A$ és $B$ két entitás. A felelősségátvitel a következő kézfogá
 2.  $B \to A$: `SYN-ACK` ("Dehogy jövök, ez a te asztalod.")
 3.  $A \to B$: `RST` ("Én ezt nem láttam, szabadságon voltam.")
 
+---
+
 **8.2. Adatvesztési Tétel (A "Spam-mappa" szingularitás)**
 Minden $m$ fontosságú üzenet esetén annak a valószínűsége, hogy a fogadó fél "nem kapta meg", arányos a munka elvégzésének nehézségével:
 
@@ -163,10 +203,14 @@ Ahol $\lambda$ a *lustasági állandó*.
 
 A klasszikus optimalizálási módszerek (pl. gradiens ereszkedés) helyett a magyar térben a *Lagrange-multiplikátorok* egy speciális esetét, az úgynevezett **Kenőpénz-multiplikátort** alkalmazzuk.
 
+---
+
 **9.1. Célfüggvény**
 Minimalizálandó a $W$ (Work) energia, a következő kényszerfeltételek mellett:
 *   $S$ (Salary) $\to \max$
 *   $T$ (Time in office) $\to \min$
+
+---
 
 **9.2. A Megoldás**
 A lokális optimum nem a globális minimumban található, hanem a rendszer határain kívül, az úgynevezett *Szürke Zónában*.

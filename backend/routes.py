@@ -27,10 +27,12 @@ def places_search(city: str, query: str = ""):
         return {"results": provider.search(city=city, query=query)}
     except PlacesProviderError as e:
         log.exception("Places provider failed")
-        raise HTTPException(status_code=502, detail=f"Places provider error: {e}")
+        raise HTTPException(status_code=502, detail=str(e))
     except Exception as e:
+        # ez fogja meg pl. a requests timeoutot, ha mégis átszivárogna
         log.exception("Unexpected error in places_search")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=502, detail=f"Upstream timeout/error: {e}")
+
 
 
 @router.post("/wishlist", response_model=WishlistOut)

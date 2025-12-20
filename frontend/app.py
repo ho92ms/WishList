@@ -19,7 +19,9 @@ with tab1:
 
     if st.button("Search"):
         try:
-            r = requests.get(f"{API_BASE}/places/search", params={"city": city, "query": query}, timeout=20)
+            r = requests.get(f"{API_BASE}/places/search",
+                             params={"city": city, "query": query},
+                             timeout=60)
             r.raise_for_status()
             st.session_state["results"] = r.json().get("results", [])
         except Exception as e:

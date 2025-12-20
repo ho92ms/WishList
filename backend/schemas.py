@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 Tag = Literal["food", "culture", "nature"]
 
@@ -16,12 +16,11 @@ class WishlistCreate(BaseModel):
 
 
 class WishlistOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     city: str
     poi_id: str
     name: str
     address: Optional[str]
     tag: Tag
-
-    class Config:
-        from_attributes = True

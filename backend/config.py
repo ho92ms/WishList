@@ -28,6 +28,7 @@ class Settings(BaseSettings):
 
     # Backend base for Streamlit -> FastAPI calls
     backend_base_url: str = "http://127.0.0.1:8000"
+    overpass_fallback_url: str | None = None
 
     # Automation
     weekly_report_days: int = 7

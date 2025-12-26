@@ -26,3 +26,4 @@ httpx
 
 # --- Optional but useful ---
 pandas
+psycopg2-binary

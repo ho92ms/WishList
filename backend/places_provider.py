@@ -36,13 +36,16 @@ class PlacesProvider:
 
         lat, lon = self._geocode_city(city)
 
-        # Udvariasság
-        time.sleep(0.3)
-
+        time.sleep(0.3)  # OSM etiquette
         return self._overpass_search(lat=lat, lon=lon, query=query)
 
     def _headers(self) -> Dict[str, str]:
-        return {"User-Agent": settings.osm_user_agent, "Accept": "application/json"}
+        return {
+            "User-Agent": settings.osm_user_agent,
+            "Accept": "application/json",
+        }
+
+    # ---------- GEOCODING ----------
 
     def _geocode_city(self, city: str) -> Tuple[float, float]:
         if not city:
@@ -52,21 +55,27 @@ class PlacesProvider:
         if key in self._city_cache:
             return self._city_cache[key]
 
-        if getattr(settings, "geocoder_provider", "nominatim").lower() == "open_meteo":
+        if settings.geocoder_provider.lower() == "open_meteo":
             lat, lon = self._geocode_city_open_meteo(city)
             self._city_cache[key] = (lat, lon)
             return lat, lon
 
+        # fallback: Nominatim (lokál)
         url = f"{settings.nominatim_base_url}/search"
         params = {"q": city, "format": "json", "limit": 1}
 
         try:
-            r = requests.get(url, params=params, headers=self._headers(), timeout=settings.places_http_timeout_s)
+            r = requests.get(
+                url,
+                params=params,
+                headers=self._headers(),
+                timeout=settings.places_http_timeout_s,
+            )
         except requests.RequestException as e:
             raise PlacesProviderError(f"Nominatim request failed: {e}")
 
         if r.status_code != 200:
-            raise PlacesProviderError(f"Nominatim HTTP {r.status_code}: {(r.text or '')[:200]}")
+            raise PlacesProviderError(f"Nominatim HTTP {r.status_code}")
 
         data = _safe_json(r)
         if not data:
@@ -77,18 +86,43 @@ class PlacesProvider:
         self._city_cache[key] = (lat, lon)
         return lat, lon
 
+    def _geocode_city_open_meteo(self, city: str) -> Tuple[float, float]:
+        url = f"{settings.openmeteo_geocoding_base_url}/search"
+        params = {"name": city, "count": 1, "format": "json"}
+
+        try:
+            r = requests.get(
+                url,
+                params=params,
+                headers=self._headers(),
+                timeout=settings.places_http_timeout_s,
+            )
+        except requests.RequestException as e:
+            raise PlacesProviderError(f"Open-Meteo geocoding request failed: {e}")
+
+        if r.status_code != 200:
+            raise PlacesProviderError(f"Open-Meteo HTTP {r.status_code}")
+
+        data = _safe_json(r)
+        results = data.get("results") or []
+        if not results:
+            raise PlacesProviderError(f"City not found (Open-Meteo): {city}")
+
+        return float(results[0]["latitude"]), float(results[0]["longitude"])
+
+
+
     def _filters(self, query: str) -> List[str]:
         if not query:
             return [
                 'node(around:R, LAT, LON)["tourism"];',
                 'node(around:R, LAT, LON)["amenity"];',
-                'node(around:R, LAT, LON)["leisure"];',
             ]
+
         safe = re.escape(query)
         return [
             f'node(around:R, LAT, LON)["name"~"{safe}",i];',
             f'node(around:R, LAT, LON)["amenity"]["name"~"{safe}",i];',
-            f'node(around:R, LAT, LON)["tourism"]["name"~"{safe}",i];',
         ]
 
     def _overpass_query(self, lat: float, lon: float, query: str) -> str:
@@ -97,6 +131,7 @@ class PlacesProvider:
             b.replace("R", str(radius)).replace("LAT", str(lat)).replace("LON", str(lon))
             for b in self._filters(query)
         ]
+
         return f"""
 [out:json][timeout:25];
 (
@@ -113,87 +148,55 @@ out center;
                 headers=self._headers(),
                 timeout=settings.places_http_timeout_s,
             )
-        except requests.ReadTimeout:
-            raise PlacesProviderError(f"Overpass timeout at {url}")
         except requests.RequestException as e:
-            raise PlacesProviderError(f"Overpass request failed at {url}: {e}")
+            raise PlacesProviderError(f"Overpass request failed: {e}")
 
         if r.status_code != 200:
-            raise PlacesProviderError(f"Overpass HTTP {r.status_code} at {url}: {(r.text or '')[:250]}")
+            raise PlacesProviderError(f"Overpass HTTP {r.status_code}")
 
-        payload = _safe_json(r)
-        return payload
+        return _safe_json(r)
 
     def _overpass_search(self, lat: float, lon: float, query: str) -> List[Dict[str, Any]]:
-        limit = int(settings.places_limit)
         ql = self._overpass_query(lat, lon, query)
-
         urls = [settings.overpass_base_url]
-        fallback = getattr(settings, "overpass_fallback_url", None)
-        if fallback:
-            urls.append(fallback)
 
-        last_err: Optional[str] = None
+        if settings.overpass_fallback_url:
+            urls.append(settings.overpass_fallback_url)
 
-        # próbáljuk mindkét endpointot 1-1 alkalommal, minimális backoffal
+        last_error = None
+
         for url in urls:
-            for attempt in (1, 2):
-                try:
-                    if attempt > 1:
-                        time.sleep(0.6)
-                    payload = self._try_overpass(url, ql)
-                    elements = payload.get("elements", [])
-                    results = self._elements_to_results(elements)
-                    results.sort(key=lambda x: x["name"].lower())
-                    return results[:limit]
-                except PlacesProviderError as e:
-                    last_err = str(e)
+            try:
+                payload = self._try_overpass(url, ql)
+                elements = payload.get("elements", [])
+                results = self._elements_to_results(elements)
+                return results[: settings.places_limit]
+            except PlacesProviderError as e:
+                last_error = str(e)
 
-        raise PlacesProviderError(last_err or "Overpass failed")
+        raise PlacesProviderError(last_error or "Overpass failed")
 
     def _elements_to_results(self, elements: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        def to_result(el: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        results = []
+
+        for el in elements:
             tags = el.get("tags", {})
             name = tags.get("name")
             if not name:
-                return None
+                continue
 
-            poi_id = f"osm:{el.get('type')}:{el.get('id')}"
-            return {
-                "poi_id": poi_id,
-                "name": name,
-                "address": self._format_address(tags),
-                "lat": el.get("lat"),
-                "lon": el.get("lon"),
-            }
+            results.append(
+                {
+                    "poi_id": f"osm:{el.get('type')}:{el.get('id')}",
+                    "name": name,
+                    "address": self._format_address(tags),
+                    "lat": el.get("lat"),
+                    "lon": el.get("lon"),
+                }
+            )
 
-        return [x for x in (to_result(e) for e in elements) if x is not None]
+        return results
 
     def _format_address(self, tags: Dict[str, Any]) -> Optional[str]:
-        parts = []
-        for k in ("addr:street", "addr:housenumber", "addr:city", "addr:postcode"):
-            if tags.get(k):
-                parts.append(tags.get(k))
-        return " ".join([p for p in parts if p]) if parts else None
-
-
-def _geocode_city_open_meteo(self, city: str) -> Tuple[float, float]:
-    url = f"{settings.openmeteo_geocoding_base_url}/search"
-    params = {"name": city, "count": 1, "format": "json"}
-
-    try:
-        r = requests.get(url, params=params, headers=self._headers(), timeout=settings.places_http_timeout_s)
-    except requests.RequestException as e:
-        raise PlacesProviderError(f"Open-Meteo geocoding request failed: {e}")
-
-    if r.status_code != 200:
-        raise PlacesProviderError(f"Open-Meteo geocoding HTTP {r.status_code}: {(r.text or '')[:200]}")
-
-    data = _safe_json(r)
-    results = data.get("results") or []
-    if not results:
-        raise PlacesProviderError(f"City not found (Open-Meteo): {city}")
-
-    lat = float(results[0]["latitude"])
-    lon = float(results[0]["longitude"])
-    return lat, lon
+        parts = [tags.get(k) for k in ("addr:street", "addr:housenumber", "addr:city") if tags.get(k)]
+        return " ".join(parts) if parts else None

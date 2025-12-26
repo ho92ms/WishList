@@ -27,13 +27,13 @@ pip install -r requirements.txt
 A projekt virtuális környezetet (`.venv`) használ. Fontos, hogy a PyCharm **ezt** az interpretert használja, különben a telepített csomagokat (pl. `requests`, `fastapi`) nem fogja felismerni.
 Lépések:
 1. **File → Settings → Python → Interpreter**
-2. Kattints: **Add Interpreter**
-3. Válaszd: **Add Local Interpreter**
+2. Keressük meg: **Add Interpreter**
+3. Majd utána: **Add Local Interpreter**
 4. Típus: **Virtualenv Environment**
-5. Jelöld be: **Existing environment**
-6. Tallózd ki: A projekt gyökérkönyvtárát \.venv\Scripts\python.exe
+5. Be kell jelölin: **Existing environment**
+6. Tallózzuk ki: A projekt gyökérkönyvtárát \.venv\Scripts\python.exe
 7. Azaz ne a Program Files vagy AppData python.exe-jét. 
-8. OK -> várd meg, amíg a PyCharm szinkronizálja a környezetet
+8. OK -> várjuk meg, amíg a PyCharm szinkronizálja a környezetet
 
 Szükség esetén a PyCharm felajánlja a `requirements.txt` csomagjainak telepítését — ezt engedélyezni kell.
 

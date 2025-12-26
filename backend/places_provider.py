@@ -52,6 +52,11 @@ class PlacesProvider:
         if key in self._city_cache:
             return self._city_cache[key]
 
+        if getattr(settings, "geocoder_provider", "nominatim").lower() == "open_meteo":
+            lat, lon = self._geocode_city_open_meteo(city)
+            self._city_cache[key] = (lat, lon)
+            return lat, lon
+
         url = f"{settings.nominatim_base_url}/search"
         params = {"q": city, "format": "json", "limit": 1}
 
@@ -170,3 +175,25 @@ out center;
             if tags.get(k):
                 parts.append(tags.get(k))
         return " ".join([p for p in parts if p]) if parts else None
+
+
+def _geocode_city_open_meteo(self, city: str) -> Tuple[float, float]:
+    url = f"{settings.openmeteo_geocoding_base_url}/search"
+    params = {"name": city, "count": 1, "format": "json"}
+
+    try:
+        r = requests.get(url, params=params, headers=self._headers(), timeout=settings.places_http_timeout_s)
+    except requests.RequestException as e:
+        raise PlacesProviderError(f"Open-Meteo geocoding request failed: {e}")
+
+    if r.status_code != 200:
+        raise PlacesProviderError(f"Open-Meteo geocoding HTTP {r.status_code}: {(r.text or '')[:200]}")
+
+    data = _safe_json(r)
+    results = data.get("results") or []
+    if not results:
+        raise PlacesProviderError(f"City not found (Open-Meteo): {city}")
+
+    lat = float(results[0]["latitude"])
+    lon = float(results[0]["longitude"])
+    return lat, lon

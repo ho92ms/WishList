@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     env: str = "local"
     log_level: str = "INFO"
 
+    geocoder_provider: str = "nominatim"  # nominatim | open_meteo
+    openmeteo_geocoding_base_url: str = "https://geocoding-api.open-meteo.com/v1"
+
     # DB
     database_url: str = "sqlite:///./data/app.db"
 

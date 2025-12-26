@@ -43,7 +43,6 @@ def places_search(city: str, query: str = ""):
         raise HTTPException(status_code=502, detail=f"Upstream timeout/error: {e}")
 
 
-
 @router.post("/wishlist", response_model=WishlistOut)
 def wishlist_add(payload: WishlistCreate, db: Session = Depends(get_db)):
     item = WishlistItem(**payload.model_dump())

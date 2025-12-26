@@ -1,77 +1,136 @@
 # WishList (Travel Wishlist)
 
-Travel Wishlist – FastAPI backend + Streamlit frontend alkalmazás városokhoz tartozó POI-k (látnivalók) keresésére és wishlist-be mentésére.
+A **Travel Wishlist** egy Python alapú webalkalmazás, amely lehetővé teszi városokhoz tartozó POI-k (látnivalók, helyek) keresését, valamint ezek wishlist-be mentését.  
+A rendszer **FastAPI backendből**, **Streamlit frontendből**, adatbázisból és statisztikai funkciókból áll.
 
-## Funkciók
-- Város + keresőkifejezés alapján POI-k keresése (OSM: Nominatim + Overpass)
-- Wishlist CRUD: létrehozás, listázás, törlés
-- Címkék: food / culture / nature
-- Statisztika: top címkék, top városok
-- Automatizáció: heti top wishlisted elemek generálása (SQLite-ba mentve)
-- Tesztek: pytest (3 teszt, 1 parametrizált)
+---
+
+## Fő funkciók
+
+- Város + keresőkifejezés alapján POI-k keresése  
+  (külső API lánc: **Geocoding + Overpass / OpenStreetMap**)
+- Wishlist CRUD műveletek:
+  - létrehozás
+  - listázás
+  - törlés
+- Címkézés: `food`, `culture`, `nature`
+- Statisztikák:
+  - top címkék
+  - top városok
+- Automatizációs logika:
+  - heti top wishlisted elemek számítása (DB-be menthető)
+- Tesztelés:
+  - `pytest`
+  - parametrizált teszt is szerepel
+
+---
+
+## Live (Deploy)
+
+- **Frontend (Streamlit Cloud):**  
+  https://nemdavid.streamlit.app/
+
+- **Backend (Render):**  
+  https://wishlist-calv.onrender.com/
+
+- **Swagger / API dokumentáció:**  
+  https://wishlist-calv.onrender.com/docs
+
+---
 
 ## Követelmények
-- Python 3.10+ ajánlott
-- venv használata
-- `.env` szükséges (ld. alább)
+
+- Python **3.10+** (ajánlott)
+- Virtuális környezet (`venv`)
+- `.env` konfigurációs fájl (példa: `.env.example`)
+
+---
 
 ## Telepítés
+
+### Virtuális környezet létrehozása
+
 ```bash
 python -m venv .venv
-# Windows:
+```
+
+### Virtuális környezet aktiválása (Windows)
+
+```bash
 .\.venv\Scripts\activate
+```
+
+### Csomagok telepítése
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Interpreter beállítása:
-A projekt virtuális környezetet (`.venv`) használ. Fontos, hogy a PyCharm **ezt** az interpretert használja, különben a telepített csomagokat (pl. `requests`, `fastapi`) nem fogja felismerni.
-Lépések:
-1. **File → Settings → Python → Interpreter**
-2. Keressük meg: **Add Interpreter**
-3. Majd utána: **Add Local Interpreter**
-4. Típus: **Virtualenv Environment**
-5. Be kell jelölin: **Existing environment**
-6. Tallózzuk ki: A projekt gyökérkönyvtárát \.venv\Scripts\python.exe
-7. Azaz ne a Program Files vagy AppData python.exe-jét. 
-8. OK -> várjuk meg, amíg a PyCharm szinkronizálja a környezetet
+### PyCharm interpreter beállítása (fontos!)
 
-Szükség esetén a PyCharm felajánlja a `requirements.txt` csomagjainak telepítését — ezt engedélyezni kell.
+A projekt virtuális környezetet (`.venv`) használ.  
+Ha a PyCharm nem ezt az interpretert használja, a csomagok (pl. `requests`, `fastapi`) pirossal lesznek aláhúzva.
 
-###
+**Lépések PyCharm-ban:**
 
-### Indítás
+1. **File** → **Settings** → **Python** → **Interpreter**
+2. **Add Interpreter**
+3. **Add Local Interpreter**
+4. **Típus:** Virtualenv Environment
+5. **Jelöljük be:** Existing environment
+6. **Tallózzuk ki:**  
+   `<projekt_könyvtár>\.venv\Scripts\python.exe`
+7. **OK**, majd várjuk meg a szinkronizálást
 
-Backend (FastAPI):
+A PyCharm szükség esetén felajánlja a `requirements.txt` csomagjainak telepítését – ezt engedélyezni kell.
 
+### Környezeti változók (.env)
+
+A projekt gyökerében szükséges egy `.env` fájl.  
+Kiindulásként használhato a `.env.example` fájl.
+
+**Megjegyzés geocodinghoz:**
+- Lokális futtatásnál használható a **Nominatim**
+- Cloud környezetben (Render) stabilabb az **Open-Meteo Geocoding**, ezért ott ez van használva
+
+---
+
+## Indítás
+
+### Backend (FastAPI)
+
+```bash
 uvicorn backend.main:app --reload
+```
 
-Ez elindítja az API-t: http://127.0.0.1:8000
+- **API:** http://127.0.0.1:8000
+- **Swagger:** http://127.0.0.1:8000/docs
 
-Swagger: http://127.0.0.1:8000/docs
+### Frontend (Streamlit)
 
-###
+Új terminál ablakban:
 
-### Frontend (Streamlit) indítása terminál ablakban:
-
+```bash
 streamlit run frontend/app.py
+```
 
+- **Böngésző:** http://localhost:8501
 
-Ez megnyitja a böngészőt: http://localhost:8501
+A Streamlit alkalmazás innen hívja a FastAPI backend végpontjait.
 
-A Streamlit innen hívja a FastAPI végpontokat.
-###
+### Worker (automatizációs logika)
 
-### Worker (automatizáció) – új terminál ablakban:
+Új terminál ablakban:
 
+```bash
 python scripts/worker.py
+```
 
-Ez generál “weekly top” riportot és elmenti a DB-be.
-###
+Ez kiszámítja a heti top wishlist elemeket és elmenti azokat az adatbázisba.
 
-### Tesztek:
+---
 
+## Tesztek futtatása
+
+```bash
 pytest -q
-
-2025.12.26. EDIT:
-https://nemdavid.streamlit.app/
-https://wishlist-calv.onrender.com/health  -> status OK!

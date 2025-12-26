@@ -71,3 +71,7 @@ Ez generál “weekly top” riportot és elmenti a DB-be.
 ### Tesztek:
 
 pytest -q
+
+2025.12.26. EDIT:
+https://nemdavid.streamlit.app/
+https://wishlist-calv.onrender.com/health  -> status OK!

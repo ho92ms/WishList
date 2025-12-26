@@ -16,6 +16,15 @@ log = logging.getLogger("api")
 provider = PlacesProvider()
 
 
+@router.get("/")
+def root():
+    return {
+        "name": "Travel Wishlist API",
+        "health": "/health",
+        "docs": "/docs"
+    }
+
+
 @router.get("/health")
 def health():
     return {"status": "ok"}

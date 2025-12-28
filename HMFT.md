@@ -43,13 +43,14 @@ A végtelenben a rendszer beáll egy stabil, de elérhetetlen állapotba:
 $$\lim_{t \to \infty} f(t) = \sup \{ M \mid M \in \text{Morális Magaslat} \}$$
 
 *Bizonyítás:* A $\lim_{x \to \infty} \tanh(x) = 1$ tulajdonság és a l'Hôpital-szabály triviális alkalmazásával adódik.
- *(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak $-50\%$, de a rendszer globális állapota ettől még összeomlott.)*
+ *(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak $-50\text{\%}$, de a rendszer globális állapota ettől még összeomlott.)*
+
 
 Nézzük meg, miért jön ki a -1 és hogy mit jelent ez:
 
 ### 2.2. Tétel ellenőrzése - a kikérem magamnak szingularitás:
-A képlet a $t_0$ pillanatban (közvetlenül utána, $t \to t_0^+$):
-$$f(t) = \underbrace{-\tanh(0)}_{\approx 0} - \underbrace{\Theta(0^+)}_{1} + \underbrace{\text{többi tag}}_{0} = -1$$
+A képlet a **t₀** pillanatban (közvetlenül utána, **t → t₀⁺**): $$f(t) = \underbrace{-\tanh(0)}_{\approx 0} - \underbrace{\Theta(0^+)}_{1} + \underbrace{\text{többi tag}}_{0} = -1$$
+
 
 Tehát **számításilag helyes**, a határérték tényleg -1.
 
@@ -64,6 +65,7 @@ $$-1 + f_{\text{többiek}} = 1$$
 $$f_{\text{többiek}} = 2 \quad (200\%)$$
 
 **Mit jelent ez magyarra fordítva?**
+
 Azt, hogy a hiba pillanatában az első reakció nem a semlegesség (0), hanem az **aktív támadás **:
 > *"Nem elég, hogy nem én rontottam el (-1), de most még nekem kell helyrehozni azt, amit ti duplán elcs##tetek (+2)!"*
 ---
@@ -90,6 +92,7 @@ Ahol:
 Tekintsük a felelősséget vektormezőként: $\mathbf{F}(\mathbf{r}, t)$.
 
 **4.1. Tétel (Divergenciamentesség)**
+
 A rendszer zárt, forrásmentes:
 
 $$\text{div } \mathbf{F} = \nabla \cdot \mathbf{F} = 0$$
@@ -99,6 +102,7 @@ $$\text{div } \mathbf{F} = \nabla \cdot \mathbf{F} = 0$$
 ---
 
 **4.2. Tétel (Nem konzervatív erőtér)**
+
 A mező rotációja nem zérus:
 
 $$\text{rot } \mathbf{F} = \nabla \times \mathbf{F} \neq \mathbf{0}$$
@@ -120,8 +124,7 @@ Ahol $\mathbf{K}$ az $n \times n$-es *Áthárítási Mátrix*, melyre igaz, hogy
 
 **Tétel:** Minden magyar topológiai térben a felelősség $L_1$ normája állandó, de a lokális fluktuáció mértéke elérheti a $\pm 2C$ értéket az $O(\text{anyós})$ környezetben.
 
-**Bizonyítás (Indirekt):**
-Tegyük fel, hogy létezik olyan $t^*$, ahol valaki vállalja a felelősséget ($F_{\text{én}}(t^*) = 1$). Ebből következne, hogy a rendszer nem magyar, ami ellentmond a kiindulási feltételnek ($M \subset \text{Magyarország}$). Ellentmondásra jutottunk. $\blacksquare$
+**Bizonyítás (Indirekt):** Tegyük fel, hogy létezik olyan **t\***, ahol valaki vállalja a felelősséget (**Fₑₙ(t\*) = 1**). Ebből következne, hogy a rendszer nem magyar, ami ellentmond a kiindulási feltételnek (**M ⊂ Magyarország**). Ellentmondásra jutottunk. ■
 
 
 ---
@@ -190,10 +193,13 @@ Legyen $A$ és $B$ két entitás. A felelősségátvitel a következő kézfogá
 
 ---
 
-**8.2. Adatvesztési Tétel (A "Spam-mappa" szingularitás)**
-Minden $m$ fontosságú üzenet esetén annak a valószínűsége, hogy a fogadó fél "nem kapta meg", arányos a munka elvégzésének nehézségével:
+**8.2. Adatvesztési Tétel (A "Spam-mappa" szingularitás)**  
+Minden $m$ fontosságú üzenet esetén annak a valószínűsége, hogy a fogadó fél „nem kapta meg”, arányos a munka elvégzésének nehézségével:
 
-$$P(\text{nem láttam}) = 1 - e^{-\lambda \cdot \text{meló\_mennyiség}}$$
+$$
+P(\text{nem láttam}) = 1 - e^{-\lambda \cdot \mathrm{meló}_{\mathrm{mennyiség}}}
+$$
+
 
 Ahol $\lambda$ a *lustasági állandó*.
 
@@ -230,5 +236,5 @@ A számításokhoz szükséges empirikus állandók (Standard Hungarian Model):
 
 ---
 
-**Záró megjegyzés (Reviewer 2 kommentje):**
-*"A bizonyítások elegánsak, de a 'Majd holnap folytatjuk' lemma alkalmazása a 3. fejezetben nem teljesen rigorózus, bár kétségtelenül életszerű. Javaslom a cikk elfogadását, de csak felesben."*
+**Záró megjegyzés:**
+*"A bizonyítások elegánsak, de a 'Majd holnap folytatjuk' lemma alkalmazása a 3. fejezetben nem teljesen rigorózus, bár kétségtelenül életszerű. Javaslom a cikk elfogadását :)"*

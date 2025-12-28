@@ -197,11 +197,12 @@ Legyen $A$ és $B$ két entitás. A felelősségátvitel a következő kézfogá
 Minden $m$ fontosságú üzenet esetén annak a valószínűsége, hogy a fogadó fél „nem kapta meg”, arányos a munka elvégzésének nehézségével:
 
 $$
-P(\text{nem láttam}) = 1 - e^{-\lambda \cdot \mathrm{meló}_{\mathrm{mennyiség}}}
+P(\text{nem láttam}) = 1 - e^{-(\lambda \,\cdot\, \mathrm{meló} \,\cdot\, M)}
 $$
 
+Ahol $\lambda$ a *lustasági állandó*, $M$ pedig a meló mennyisége.
 
-Ahol $\lambda$ a *lustasági állandó*.
+
 
 ---
 

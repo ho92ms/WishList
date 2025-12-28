@@ -44,7 +44,7 @@ $$\lim_{t \to \infty} f(t) = \sup \{ M \mid M \in \text{Morális Magaslat} \}$$
 
 *Bizonyítás:* A $\lim_{x \to \infty} \tanh(x) = 1$ tulajdonság és a l'Hôpital-szabály triviális alkalmazásával adódik.
 
-*(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak -50%, de a rendszer globális állapota ettől még összeomlott.)*
+*(Megjegyzés: Ha 𝕀<sub>szóltam</sub> = 1, akkor a bűntudat mértéke csak -50%, de a rendszer globális állapota ettől még összeomlott.)*
 
 
 
@@ -66,8 +66,7 @@ Ha a saját felelősség ($f(t)$) a hiba pillanatában **-1** (-100%), az a köv
 
 $$f_{\text{saját}} + f_{\text{többiek}} = 1$$
 $$-1 + f_{\text{többiek}} = 1$$
-$$f_{\text{többiek}} = 2 \quad  (200\%)$$
-
+$$f_{\text{többiek}} = 2 \quad (200\%)$$
 **Mit jelent ez magyarra fordítva?**
 
 Azt, hogy a hiba pillanatában az első reakció nem a semlegesség (0), hanem az **aktív támadás **:

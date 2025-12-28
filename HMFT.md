@@ -44,11 +44,8 @@ $$\lim_{t \to \infty} f(t) = \sup \{ M \mid M \in \text{Morális Magaslat} \}$$
 
 *Bizonyítás:* A $\lim_{x \to \infty} \tanh(x) = 1$ tulajdonság és a l'Hôpital-szabály triviális alkalmazásával adódik.
 
-*(Megjegyzés: Ha 
-$\mathbb{I}_{\text{szóltam}} = 1$
-, akkor a bűntudat mértéke csak 
-$-50\text{\%}$
-, de a rendszer globális állapota ettől még összeomlott.)*
+*(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak -50%, de a rendszer globális állapota ettől még összeomlott.)*
+
 
 
 Nézzük meg, miért jön ki a -1 és hogy mit jelent ez:

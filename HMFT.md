@@ -246,3 +246,6 @@ A számításokhoz szükséges empirikus állandók (Standard Hungarian Model):
 
 **Záró megjegyzés:**
 *"A bizonyítások elegánsak, de a 'Majd holnap folytatjuk' lemma alkalmazása a 3. fejezetben nem teljesen rigorózus, bár kétségtelenül életszerű. Javaslom a cikk elfogadását :)"*
+
+2025.12.28.
+Németh Dávid

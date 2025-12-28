@@ -60,13 +60,25 @@ Tehát **számításilag helyes**, a határérték tényleg -1.
 
 ### 2.2.1. A "Magyar Valóság" értelmezése (Miért jó a -100%?)
 A dokumentum elején deklaráltuk a **Felelősségmegmaradás Törvényét**:
-$$\sum \text{Felelősség} = 1 \quad (+100\%)$$
+
+$$
+\sum \text{Felelősség} = 1 \quad (+100\%)
+$$
 
 Ha a saját felelősség ($f(t)$) a hiba pillanatában **-1** (-100%), az a következőt jelenti az egyenlet átrendezésével:
 
-$$f_{\text{saját}} + f_{\text{többiek}} = 1$$
-$$-1 + f_{\text{többiek}} = 1$$
-$$f_{\text{többiek}} = 2 \quad (200\%)$$
+$$
+f_{\text{saját}} + f_{\text{többiek}} = 1
+$$
+
+$$
+-1 + f_{\text{többiek}} = 1
+$$
+
+$$
+f_{\text{többiek}} = 2 \quad (200\%)
+$$
+
 **Mit jelent ez magyarra fordítva?**
 
 Azt, hogy a hiba pillanatában az első reakció nem a semlegesség (0), hanem az **aktív támadás **:

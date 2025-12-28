@@ -62,10 +62,13 @@ Tehát **számításilag helyes**, a határérték tényleg -1.
 A dokumentum elején deklaráltuk a **Felelősségmegmaradás Törvényét**:
 
 $$
-\sum \text{Felelősség} = 1 \quad (+100\%)
+\sum \text{Felelősség} = 1 
 $$
+-azaz 100%.
 
-Ha a saját felelősség ($f(t)$) a hiba pillanatában **-1** (-100%), az a következőt jelenti az egyenlet átrendezésével:
+Ha a saját felelősség (
+$f(t)$
+) a hiba pillanatában **-1** (-100%), az a következőt jelenti az egyenlet átrendezésével:
 
 $$
 f_{\text{saját}} + f_{\text{többiek}} = 1
@@ -76,8 +79,9 @@ $$
 $$
 
 $$
-f_{\text{többiek}} = 2 \quad (200\%)
+f_{\text{többiek}} = 2 
 $$
+azaz 200%.
 
 **Mit jelent ez magyarra fordítva?**
 

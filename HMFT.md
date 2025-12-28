@@ -64,6 +64,7 @@ A dokumentum elején deklaráltuk a **Felelősségmegmaradás Törvényét**:
 $$
 \sum \text{Felelősség} = 1 
 $$
+
 -azaz 100%.
 
 Ha a saját felelősség (
@@ -81,6 +82,7 @@ $$
 $$
 f_{\text{többiek}} = 2 
 $$
+
 azaz 200%.
 
 **Mit jelent ez magyarra fordítva?**

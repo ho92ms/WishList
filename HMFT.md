@@ -43,13 +43,20 @@ A végtelenben a rendszer beáll egy stabil, de elérhetetlen állapotba:
 $$\lim_{t \to \infty} f(t) = \sup \{ M \mid M \in \text{Morális Magaslat} \}$$
 
 *Bizonyítás:* A $\lim_{x \to \infty} \tanh(x) = 1$ tulajdonság és a l'Hôpital-szabály triviális alkalmazásával adódik.
- *(Megjegyzés: Ha $\mathbb{I}_{\text{szóltam}} = 1$, akkor a bűntudat mértéke csak $-50\text{\%}$, de a rendszer globális állapota ettől még összeomlott.)*
+
+*(Megjegyzés: Ha 
+$\mathbb{I}_{\text{szóltam}} = 1$
+, akkor a bűntudat mértéke csak 
+$-50\text{\%}$
+, de a rendszer globális állapota ettől még összeomlott.)*
 
 
 Nézzük meg, miért jön ki a -1 és hogy mit jelent ez:
 
 ### 2.2. Tétel ellenőrzése - a kikérem magamnak szingularitás:
-A képlet a **t₀** pillanatban (közvetlenül utána, **t → t₀⁺**): $$f(t) = \underbrace{-\tanh(0)}_{\approx 0} - \underbrace{\Theta(0^+)}_{1} + \underbrace{\text{többi tag}}_{0} = -1$$
+A képlet a **t₀** pillanatban (közvetlenül utána, **t → t₀⁺**): 
+
+$$f(t) = \underbrace{-\tanh(0)}_{\approx 0} - \underbrace{\Theta(0^+)}_{1} + \underbrace{\text{többi tag}}_{0} = -1$$
 
 
 Tehát **számításilag helyes**, a határérték tényleg -1.
@@ -62,7 +69,7 @@ Ha a saját felelősség ($f(t)$) a hiba pillanatában **-1** (-100%), az a köv
 
 $$f_{\text{saját}} + f_{\text{többiek}} = 1$$
 $$-1 + f_{\text{többiek}} = 1$$
-$$f_{\text{többiek}} = 2 \quad (200\%)$$
+$$f_{\text{többiek}} = 2 \quad  (200\%)$$
 
 **Mit jelent ez magyarra fordítva?**
 
@@ -197,7 +204,7 @@ Legyen $A$ és $B$ két entitás. A felelősségátvitel a következő kézfogá
 Minden $m$ fontosságú üzenet esetén annak a valószínűsége, hogy a fogadó fél „nem kapta meg”, arányos a munka elvégzésének nehézségével:
 
 $$
-P(\text{nem láttam}) = 1 - e^{-(\lambda \,\cdot\, \mathrm{meló} \,\cdot\, M)}
+P(\text{nem láttam}) = 1 - e^{-(\lambda \ \cdot\  \mathrm{meló} \ \cdot\  M)}
 $$
 
 Ahol $\lambda$ a *lustasági állandó*, $M$ pedig a meló mennyisége.
